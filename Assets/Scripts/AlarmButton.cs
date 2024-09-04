@@ -8,7 +8,6 @@ public class AlarmButton : ButtonBase
     protected override void Awake()
     {
         base.Awake();
-        _clocks = FindFirstObjectByType<ClockController>();
     }
 
     protected override void OnDestroy()

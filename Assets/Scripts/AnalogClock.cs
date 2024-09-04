@@ -6,12 +6,6 @@ public class AnalogClock : ClockBase
     public GameObject pointerSeconds;
     public GameObject pointerMinutes;
     public GameObject pointerHours;
-
-    //protected override void OnEnable()
-    //{
-    //    base.OnEnable();
-    //}
-
     public override void UpdateClock(DateTime currTime)
     {
         float hours = currTime.Hour;
