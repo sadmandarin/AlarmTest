@@ -29,9 +29,7 @@ public class TimeContainer : ScriptableObject
 
         long unixTimeInMilliseconds = timeResponse.time;
 
-        long unixTimeInSeconds = unixTimeInMilliseconds / 1000;
-
-        DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeInSeconds).LocalDateTime;
+        DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(unixTimeInMilliseconds).LocalDateTime;
 
         SynchTime = dateTime;
 
