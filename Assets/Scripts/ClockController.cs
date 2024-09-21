@@ -6,13 +6,16 @@ public class ClockController : MonoBehaviour
 
     [SerializeField] private TimeContainer _timeContainer;
 
-    private ClockBase _clock;
-    
-    public ClockBase Clock {  get { return _clock; } }
+    private AnalogClock _analogClock;
+    private DigitalWatch _digitalClock;
 
     void Awake()
     {
-        _clock.UpdateClock(_timeContainer.SynchTime);
+        _analogClock = FindFirstObjectByType<AnalogClock>();
+        _digitalClock = FindFirstObjectByType<DigitalWatch>();
+
+        _analogClock.UpdateClock(_timeContainer.SynchTime);
+        _digitalClock.UpdateClock(_timeContainer.SynchTime);
     }
 
     void Update()
@@ -24,17 +27,8 @@ public class ClockController : MonoBehaviour
 
             msecs -= 1.0f;
 
-            _clock.UpdateClock(_timeContainer.SynchTime);
-        }
-    }
-
-    public void SetClock(ClockBase clock)
-    {
-        if (clock != _clock)
-        {
-            _clock = clock;
-
-            _clock.UpdateClock(_timeContainer.SynchTime);
+            _analogClock?.UpdateClock(_timeContainer.SynchTime);
+            _digitalClock?.UpdateClock(_timeContainer.SynchTime);
         }
     }
 }

@@ -5,71 +5,22 @@ using UnityEngine.Networking;
 
 public class SyncronizeTime : MonoBehaviour
 {
-    private string[] timeUrls = {"http://worldtimeapi.org/api/timezone/Etc/UTC",
-                                 "https://www.timeapi.io/api/Time/current/zone?timeZone=UTC"};
+    private string[] timeUrls = { "https://yandex.com/time/sync.json" };
     private int _synchTime = 3600;
 
     [SerializeField] private TimeContainer _timeContainer;
 
-    private void Start()
-    {
-        InvokeRepeating(nameof(Synchronize), 0, _synchTime);
-    }
-
-    private void Synchronize()
+    private void Awake()
     {
         StartCoroutine(SynchronizeTime());
     }
 
     private IEnumerator SynchronizeTime()
     {
-        bool synchedTime = false;
-
-        foreach (var url in timeUrls)
+        while (true)
         {
-            UnityWebRequest request = UnityWebRequest.Get(url);
+            yield return new WaitForSeconds(_synchTime);
 
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                SetTime(request.downloadHandler.text);
-                synchedTime = true;
-                break;
-            }
-            else
-                continue;
-        }
-
-        if (!synchedTime)
-        {
-            _timeContainer.SynchTime = DateTime.UtcNow.ToLocalTime();
-        }
-    }
-
-    private void SetTime(string json)
-    {
-        string timeString = ParseJsonForTime(json);
-        if (DateTime.TryParse(timeString, out DateTime networkTime))
-        {
-            _timeContainer.SynchTime = networkTime.ToLocalTime();
-        }
-    }
-
-    private string ParseJsonForTime(string json)
-    {
-        if (json.Contains("\"datetime\":\""))
-        {
-            int startIndex = json.IndexOf("\"datetime\":\"") + 12;
-            int endIndex = json.IndexOf("\",", startIndex);
-            return json.Substring(startIndex, endIndex - startIndex);
-        }
-        else if (json.Contains("\"dateTime\":\""))
-        {
-            int startIndex = json.IndexOf("\"dateTime\":\"") + 12;
-            int endIndex = json.IndexOf("\",", startIndex);
-            return json.Substring(startIndex, endIndex - startIndex);
-        }
-        return null;
-    }
+            StartCoroutine(_timeContainer.SynchronizeTime(timeUrls));
+        }    }
 }

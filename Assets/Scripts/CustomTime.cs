@@ -2,15 +2,16 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DigitalClockAlarm : MonoBehaviour
+public class CustomTime : MonoBehaviour
 {
     private InputField _inputField;
 
-    [SerializeField] private AlarmController _alarmController;
+    [SerializeField] private TimeContainer _timeContainer;
 
     private void OnEnable()
     {
         _inputField = GetComponent<InputField>();
+        _inputField.text = null;
 
         _inputField.onEndEdit.AddListener(OnTimeInputEndEdit);
         _inputField.onValueChanged.AddListener(OnTimeInputValueChanged);
@@ -44,7 +45,7 @@ public class DigitalClockAlarm : MonoBehaviour
     {
         if (IsValidTime(input, out DateTime parsedTime))
         {
-            _alarmController.SetAlarm(parsedTime);
+            _timeContainer.SynchTime = parsedTime;
 
             gameObject.SetActive(false);
         }
