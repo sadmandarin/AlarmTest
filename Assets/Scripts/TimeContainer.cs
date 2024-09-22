@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 public class TimeContainer : ScriptableObject
 {
     public DateTime SynchTime;
+    public bool IsTimeSynchronized = false;
 
     public IEnumerator SynchronizeTime(string[] timeUrls)
     {
@@ -19,6 +20,9 @@ public class TimeContainer : ScriptableObject
             if (request.result == UnityWebRequest.Result.Success)
             {
                 ParseJsonForTime(request.downloadHandler.text);
+
+                IsTimeSynchronized = true;
+
                 break;
             }
         }

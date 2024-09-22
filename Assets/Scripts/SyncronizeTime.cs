@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SyncronizeTime : MonoBehaviour
 {
-    private string[] timeUrls = { "https://yandex.com/time/sync.json" };
+    private string[] timeUrls = { "https://thingproxy.freeboard.io/fetch/https://yandex.com/time/sync.json" };
     private int _synchTime = 3600;
 
     [SerializeField] private TimeContainer _timeContainer;

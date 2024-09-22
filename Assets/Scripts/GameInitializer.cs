@@ -4,9 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class GameInitializer : MonoBehaviour
 {
-    private string[] timeUrls = { "https://yandex.com/time/sync.json" };
+    private string[] timeUrls = { "https://thingproxy.freeboard.io/fetch/https://yandex.com/time/sync.json" };
 
     [SerializeField] private TimeContainer _timeContainer;
+    private bool isTimeSynchronized;
 
     private void Awake()
     {
@@ -17,7 +18,26 @@ public class GameInitializer : MonoBehaviour
     {
         yield return StartCoroutine(_timeContainer.SynchronizeTime(timeUrls));
 
-        SceneManager.LoadScene(1);
+        if (_timeContainer.IsTimeSynchronized)
+        {
+            isTimeSynchronized = true;
+            Debug.Log("Time synchronized successfully.");
+        }
+        else
+        {
+            Debug.LogWarning("Time synchronization failed.");
+        }
+
+        yield return new WaitForSeconds(1);
+
+        if (isTimeSynchronized)
+        {
+            SceneManager.LoadScene(1);
+        }
+        else
+        {
+            Debug.LogError("Skipping scene load due to failed time synchronization.");
+        }
     }
 
 }
